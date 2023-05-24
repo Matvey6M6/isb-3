@@ -4,7 +4,7 @@ from cryptography.hazmat.primitives.asymmetric import rsa, padding
 from cryptography.hazmat.primitives import serialization, hashes
 from cryptography.hazmat.primitives.serialization import load_pem_public_key, load_pem_private_key
 
-
+logging.basicConfig(level=logging.INFO)
 class assymetric:
 
     def __init__(self, public_k_file, private_k_file, decrypted_file, ciphed_file):

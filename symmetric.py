@@ -5,7 +5,7 @@ from cryptography.hazmat.primitives import padding
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.backends import default_backend
 
-
+logging.basicConfig(level=logging.INFO)
 class symmetric:
     def __init__(self, size, sym_key_file, encrypt_file, decrypt_file):
 
