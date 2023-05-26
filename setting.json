@@ -1,9 +1,9 @@
 {
-    "src_text_file": "./data/text_file",
-    "encrypted_file": "./data/ciphed_text",
-    "decrypted_file": "./data/decrypted_text",
-    "symmetric_key": "./keys/symmetric_key",
-    "symmetric_key_decrypted": "./keys/symmetric_key_decrypted",
+    "src_text_file": "./data/text_file.txt",
+    "encrypted_file": "./data/ciphed_text.txt",
+    "decrypted_file": "./data/decrypted_text.txt",
+    "symmetric_key": "./keys/symmetric_key.txt",
+    "symmetric_key_decrypted": "./keys/symmetric_key_decrypted.txt",
     "public_key": "./keys/public.pem",
     "private_key": "./keys/private.pem",
     "size": "128"

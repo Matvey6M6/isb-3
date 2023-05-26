@@ -7,7 +7,7 @@ from cryptography.hazmat.backends import default_backend
 
 logging.basicConfig(level=logging.INFO)
 class Symmetric:
-    def __init__(self, size, sym_key_file, encrypt_file, decrypt_file):
+    def __init__(self, size, sym_key_file, encrypt_file= None, decrypt_file= None):
 
         self.size = size
         self.sym_key_file = sym_key_file
@@ -38,10 +38,10 @@ class Symmetric:
             logging.error(f"Файл {self.encrypt_file} ошибка чтения")
             exit()
 
-        iv = c_text[:8]
-        c_text = c_text[8:]
-
-        cipher = Cipher(algorithms.Camellia(self.open_symkey()),
+        iv = c_text[:16]
+        c_text = c_text[16:]
+        key = self.open_symkey()
+        cipher = Cipher(algorithms.Camellia(key[:16]),
                         modes.CBC(iv), backend=default_backend())
 
         decryptor = cipher.decryptor()
@@ -72,18 +72,17 @@ class Symmetric:
             logging.error(f"Файл {self.encrypt_file}: ошибка при записи ")
 
     def encrytp(self):
-
-        data = str()
-
-        with open(self.decrypt_file, 'r') as file:
-            data = file.read()
-
-        iv = os.urandom(8)
+        try:
+            with open(self.decrypt_file, 'r') as file:
+                data = file.read()
+        except:
+            logging.error(f"Файл {self.decrypt_file} не прочитан")
+            
+        iv = os.urandom(16)
 
         key = self.open_symkey()
 
-        cipher = Cipher(algorithms.Blowfish(
-            key), modes.CBC(iv), backend=default_backend())
+        cipher = Cipher(algorithms.Camellia(key[:16]), modes.CBC(iv))
 
         data = self._padd_(data)
 
@@ -91,6 +90,7 @@ class Symmetric:
         c_text = iv + encryptor.update(data) + encryptor.finalize()
 
         self.write_encrytext(c_text)
+
 
     def open_symkey(self):
         try:

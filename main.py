@@ -4,8 +4,8 @@ import logging
 import os
 
 from  keys_generator import keys_generator
-import  encryption 
-import decryption
+from  encryption import encrypt
+from  decryption import decrypt
 logging.basicConfig(level=logging.INFO)
 
 def check_size(size):
@@ -25,11 +25,12 @@ if __name__ == "__main__":
                             help='Запуск шифрования')
     mode_group.add_argument('-dec', '--decryption', action='store_true',
                             help='Запуск расшифрования')
-    parser.add_argument('config_file', metavar='N',
+    parser.add_argument('config_file', metavar='Config',
                         type=str, help='Установить свой конфиг файл')
     args = parser.parse_args()
     mode = (args.generation, args.encryption, args.decryption)
     SETTINGS = os.path.join(args.config_file)
+    SETTINGS = os.path.join("setting.json")
     settings = str()
     try:
         with open(SETTINGS) as json_file:
@@ -40,7 +41,7 @@ if __name__ == "__main__":
     size = int(settings["size"])
     size, flag = check_size(size)
     if not flag :
-        logging.info('Размер ключа не тот. Выбран дефолтный размер: 128.')
+        logging.warning('Размер ключа не тот. Выбран дефолтный размер: 128.')
     else:
         logging.info(f'Размер принят: {size}' )
 
@@ -53,17 +54,17 @@ if __name__ == "__main__":
                  logging("НЕ получилось сгенерировать ключи ")
     elif( mode == (False, True, False)):
             try:
-                encryption.encrypt_data(settings['src_text_file'], settings['private_key'],
+                encrypt(settings['src_text_file'], settings['private_key'],
                          settings['symmetric_key'], settings['encrypted_file'], settings["symmetric_key_decrypted"], size)
                 logging.info('Данные зашифрованный')
             except:
-                 logging.info("Отмена шифрования данных")
+                 logging.error("Отмена шифрования данных")
     elif(mode ==  (False, False, True)):
             try:           
-                decryption.decrypt_data(settings['encrypted_file'], settings['private_key'],
+                decrypt(settings['encrypted_file'], settings['private_key'],
                          settings['symmetric_key'], settings['decrypted_file'], settings["symmetric_key_decrypted"], size)
                 logging.info('Данные успешно расшифрованны')
             except:
-                 logging.info("Ошибка при дешифрации см выше")
+                 logging.error("Ошибка при дешифрации")
     else:
             logging.error("Режим прогроммы не выбран")

@@ -7,7 +7,7 @@ from cryptography.hazmat.primitives.serialization import load_pem_public_key, lo
 logging.basicConfig(level=logging.INFO)
 class Assymetric:
 
-    def __init__(self, public_k_file, private_k_file, decrypted_file, ciphed_file):
+    def __init__(self, public_k_file= None, private_k_file= None, decrypted_file= None, ciphed_file= None):
         self.public_pem = public_k_file
         self.private_pem = private_k_file
         self.ciphed_file = ciphed_file
@@ -61,10 +61,10 @@ class Assymetric:
             with open(self.private_pem, 'rb') as pem_in:
                 private_bytes = pem_in.read()
             private_key = load_pem_private_key(private_bytes, password=None,)
-            logging(f"Файл {self.private_pem} успешно прочитан")
+            logging.info(f"Файл { self.private_pem} успешно прочитан")
             return private_key
         except:
-            logging.error(f"Файл {self.public_pem}: ошибка при чтении")
+            logging.error(f"Файл {self.private_pem}: ошибка при чтении")
 
     def ciphed_text_to_file(self, c_text: bytes):
 
@@ -80,7 +80,7 @@ class Assymetric:
         try:
             with open(self.decrypted_file, 'wb') as file:
                 file.write(data)
-            logging.info(f"{self.ciphed_file} ")
+            logging.info(f"Файл {self.ciphed_file} запись прошла успешно")
         except:
             logging.error(f"Файл {self.ciphed_file}: ошибка при записи ")
 
@@ -111,7 +111,7 @@ class Assymetric:
         self.ciphed_text_to_file(c_text)
 
     def decrypt(self):
-        private_key = self.read_private_key(self.private_pem)
+        private_key = self.read_private_key()
         c_text = self.read_ciphed_text()
         dc_text = private_key.decrypt(c_text, padding.OAEP(mgf=padding.MGF1(
             algorithm=hashes.SHA256()), algorithm=hashes.SHA256(), label=None))
