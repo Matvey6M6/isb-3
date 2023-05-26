@@ -3,22 +3,30 @@ import json
 import logging
 import os
 
-from  keys_generator import keys_generator
-from  encryption import encrypt
-from  decryption import decrypt
+from keys_generator import keys_generator
+from encryption import encrypt
+from decryption import decrypt
 logging.basicConfig(level=logging.INFO)
 
-def check_size(size):
-    if(size != 128 or size != 192 or size !=256):
-         return 128 , False
-    return size , True
+
+def check_size(size:int):
+    """Проверка размера ключа
+
+    Args:
+        size (int): _description_
+
+    Returns:
+        tuple: размер, индикатор праильности ключа
+    """
+
+    if (size != 128 or size != 192 or size != 256):
+        return 128, False
+    return size, True
+
 
 if __name__ == "__main__":
-
     parser = argparse.ArgumentParser()
-
     mode_group = parser.add_mutually_exclusive_group(required=True)
-
     mode_group.add_argument(
         '-gen', '--generation', action='store_true', help='Запуск генерации ключей')
     mode_group.add_argument('-enc', '--encryption', action='store_true',
@@ -40,31 +48,31 @@ if __name__ == "__main__":
         exit()
     size = int(settings["size"])
     size, flag = check_size(size)
-    if not flag :
+    if not flag:
         logging.warning('Размер ключа не тот. Выбран дефолтный размер: 128.')
     else:
-        logging.info(f'Размер принят: {size}' )
+        logging.info(f'Размер принят: {size}')
 
     if (mode == (True, False, False)):
-            try:
-                keys_generator(
+        try:
+            keys_generator(
                 settings['private_key'], settings['public_key'], settings['symmetric_key'], settings['symmetric_key_decrypted'], size)
-                logging.info('Ключи успешно сгенерированны')
-            except:
-                 logging("НЕ получилось сгенерировать ключи ")
-    elif( mode == (False, True, False)):
-            try:
-                encrypt(settings['src_text_file'], settings['private_key'],
-                         settings['symmetric_key'], settings['encrypted_file'], settings["symmetric_key_decrypted"], size)
-                logging.info('Данные зашифрованный')
-            except:
-                 logging.error("Отмена шифрования данных")
-    elif(mode ==  (False, False, True)):
-            try:           
-                decrypt(settings['encrypted_file'], settings['private_key'],
-                         settings['symmetric_key'], settings['decrypted_file'], settings["symmetric_key_decrypted"], size)
-                logging.info('Данные успешно расшифрованны')
-            except:
-                 logging.error("Ошибка при дешифрации")
+            logging.info('Ключи успешно сгенерированны')
+        except:
+            logging("НЕ получилось сгенерировать ключи ")
+    elif (mode == (False, True, False)):
+        try:
+            encrypt(settings['src_text_file'], settings['private_key'],
+                    settings['symmetric_key'], settings['encrypted_file'], settings["symmetric_key_decrypted"], size)
+            logging.info('Данные зашифрованный')
+        except:
+            logging.error("Отмена шифрования данных")
+    elif (mode == (False, False, True)):
+        try:
+            decrypt(settings['encrypted_file'], settings['private_key'],
+                    settings['symmetric_key'], settings['decrypted_file'], settings["symmetric_key_decrypted"], size)
+            logging.info('Данные успешно расшифрованны')
+        except:
+            logging.error("Ошибка при дешифрации")
     else:
-            logging.error("Режим прогроммы не выбран")
+        logging.error("Режим прогроммы не выбран")

@@ -1,4 +1,4 @@
-Machine Learning trend in 2017.
+ Machine Learning trend in 2017.
 
 1. What is Machine Learning
 Machine Learning (ML) has revolutionized the world of computers by allowing them to learn as they progress forward with large datasets, thus mitigating many previous programming pitfalls and impasses. Machine Learning builds algorithms, which when exposed to high volumes of data, can self-teach and evolve. When this unique technology powers Artificial Intelligence (AI) applications, the combination can be powerful. We can soon expect to see smart robots around us doing all our jobs – much quicker, much more accurately, and even improving themselves at every step. Will this world need intelligent humans anymore or shall we soon be outclassed by self-thinking robots? What are the most visible 2017 Machine Learning trends?

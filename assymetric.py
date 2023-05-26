@@ -6,14 +6,27 @@ from cryptography.hazmat.primitives.serialization import load_pem_public_key, lo
 
 logging.basicConfig(level=logging.INFO)
 class Assymetric:
+    """  Этот класс генерирует открытый и закрытый ключи для шифрования данных"""
+    def __init__(self, public_k_file:str = None, private_k_file: str= None, decrypted_file: str = None, ciphed_file:str= None)->None:
+        """функция инициализации 
 
-    def __init__(self, public_k_file= None, private_k_file= None, decrypted_file= None, ciphed_file= None):
+        Args:
+            public_k_file (str): путь к публичному ключу. Defaults to None.
+            private_k_file (str): путь к приватному ключу. Defaults to None.
+            decrypted_file (str): расшифрованный текст. Defaults to None.
+            ciphed_file (str): зашифрованный текст. Defaults to None.
+        """
         self.public_pem = public_k_file
         self.private_pem = private_k_file
         self.ciphed_file = ciphed_file
         self.decrypted_file = decrypted_file
 
-    def public_key_to_file(self, key):
+    def public_key_to_file(self, key)->None:
+        """Серелизация публичного ключа
+
+        Args:
+            key (_type_): публичный ключ
+        """
         try:
             with open(self.public_pem, 'wb') as file_out:
                 file_out.write(key.public_bytes(encoding=serialization.Encoding.PEM,
@@ -22,8 +35,12 @@ class Assymetric:
         except:
             logging.error(f"Файл {self.public_pem}: ошибка открытия")
 
-    def private_key_to_file(self, key):
+    def private_key_to_file(self, key)->None:
+        """Серилизация приватного ключа
 
+        Args:
+            key (_type_): Приватный ключ
+        """
         try:
             with open(self.private_pem, 'wb') as file_out:
                 file_out.write(key.private_bytes(encoding=serialization.Encoding.PEM,
@@ -33,8 +50,8 @@ class Assymetric:
         except:
             logging.error(f"файл {self.public_pem}: ошибка при открытии")
 
-    def generate_pair(self):
-
+    def generate_pair(self)->None:
+        """Генерирует пару ключей открытый и закрытый."""
         keys = rsa.generate_private_key(
             public_exponent=65537,
             key_size=2048
@@ -45,7 +62,12 @@ class Assymetric:
         self.public_key_to_file(public_key)
         self.private_key_to_file(private_key)
 
-    def read_public_key(self):
+    def read_public_key(self)->None:
+        """Считываем из файла публичный ключ
+
+        Returns:
+            None
+        """
         try:
             with open(self.public_pem, 'rb') as pem_in:
                 public_bytes = pem_in.read()
@@ -55,8 +77,12 @@ class Assymetric:
         except:
             logging.error(f"Файл {self.public_pem}: ошибка при открытии")
 
-    def read_private_key(self) :
+    def read_private_key(self)->None:
+        """"Cчитываем из файла приватный ключ
 
+        Returns:
+            None
+        """
         try:
             with open(self.private_pem, 'rb') as pem_in:
                 private_bytes = pem_in.read()
@@ -66,8 +92,12 @@ class Assymetric:
         except:
             logging.error(f"Файл {self.private_pem}: ошибка при чтении")
 
-    def ciphed_text_to_file(self, c_text: bytes):
+    def ciphed_text_to_file(self, c_text: bytes)->None:
+        """Серелизация зашифрованного текста 
 
+        Args:
+            c_text (bytes)
+        """
         try:
             with open(self.ciphed_file, 'wb') as file:
                 file.write(c_text)
@@ -75,8 +105,12 @@ class Assymetric:
         except:
             logging.error(f"Файл {self.ciphed_file}: ошибка при записи")
 
-    def decrypted_text_to_file(self, data: str):
+    def decrypted_text_to_file(self, data: str)->None:
+        """Серелизация расшифрованного текста
 
+        Args:
+            data (str): 
+        """
         try:
             with open(self.decrypted_file, 'wb') as file:
                 file.write(data)
@@ -84,8 +118,12 @@ class Assymetric:
         except:
             logging.error(f"Файл {self.ciphed_file}: ошибка при записи ")
 
-    def read_ciphed_text(self) :
+    def read_ciphed_text(self)->None:
+        """Считываем зашифрованный текст из файла
 
+        Returns:
+            None
+        """
         try:
             with open(self.ciphed_file, 'rb') as file:
                 c_text = file.read()
@@ -94,8 +132,8 @@ class Assymetric:
         except:
             logging.error(f"Файл {self.ciphed_file} : ошибка при открытии")
 
-    def encrypt(self):
-
+    def encrypt(self)->None:
+        """Шифруем текст"""
         data = str()
         with open(self.decrypted_file, 'rb') as file:
             data = file.read()
@@ -111,6 +149,8 @@ class Assymetric:
         self.ciphed_text_to_file(c_text)
 
     def decrypt(self):
+        """Расшифровываем текст
+        """
         private_key = self.read_private_key()
         c_text = self.read_ciphed_text()
         dc_text = private_key.decrypt(c_text, padding.OAEP(mgf=padding.MGF1(
