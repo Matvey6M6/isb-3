@@ -5,9 +5,12 @@ from cryptography.hazmat.primitives import serialization, hashes
 from cryptography.hazmat.primitives.serialization import load_pem_public_key, load_pem_private_key
 
 logging.basicConfig(level=logging.INFO)
+
+
 class Assymetric:
     """  Этот класс генерирует открытый и закрытый ключи для шифрования данных"""
-    def __init__(self, public_k_file:str = None, private_k_file: str= None, decrypted_file: str = None, ciphed_file:str= None)->None:
+
+    def __init__(self, public_k_file: str = None, private_k_file: str = None, decrypted_file: str = None, ciphed_file: str = None) -> None:
         """функция инициализации 
 
         Args:
@@ -21,7 +24,7 @@ class Assymetric:
         self.ciphed_file = ciphed_file
         self.decrypted_file = decrypted_file
 
-    def public_key_to_file(self, key)->None:
+    def public_key_to_file(self, key) -> None:
         """Серелизация публичного ключа
 
         Args:
@@ -35,7 +38,7 @@ class Assymetric:
         except:
             logging.error(f"Файл {self.public_pem}: ошибка открытия")
 
-    def private_key_to_file(self, key)->None:
+    def private_key_to_file(self, key) -> None:
         """Серилизация приватного ключа
 
         Args:
@@ -50,7 +53,7 @@ class Assymetric:
         except:
             logging.error(f"файл {self.public_pem}: ошибка при открытии")
 
-    def generate_pair(self)->None:
+    def generate_pair(self) -> None:
         """Генерирует пару ключей открытый и закрытый."""
         keys = rsa.generate_private_key(
             public_exponent=65537,
@@ -62,7 +65,7 @@ class Assymetric:
         self.public_key_to_file(public_key)
         self.private_key_to_file(private_key)
 
-    def read_public_key(self)->None:
+    def read_public_key(self) -> None:
         """Считываем из файла публичный ключ
 
         Returns:
@@ -77,7 +80,7 @@ class Assymetric:
         except:
             logging.error(f"Файл {self.public_pem}: ошибка при открытии")
 
-    def read_private_key(self)->None:
+    def read_private_key(self) -> None:
         """"Cчитываем из файла приватный ключ
 
         Returns:
@@ -92,7 +95,7 @@ class Assymetric:
         except:
             logging.error(f"Файл {self.private_pem}: ошибка при чтении")
 
-    def ciphed_text_to_file(self, c_text: bytes)->None:
+    def ciphed_text_to_file(self, c_text: bytes) -> None:
         """Серелизация зашифрованного текста 
 
         Args:
@@ -105,7 +108,7 @@ class Assymetric:
         except:
             logging.error(f"Файл {self.ciphed_file}: ошибка при записи")
 
-    def decrypted_text_to_file(self, data: str)->None:
+    def decrypted_text_to_file(self, data: str) -> None:
         """Серелизация расшифрованного текста
 
         Args:
@@ -118,7 +121,7 @@ class Assymetric:
         except:
             logging.error(f"Файл {self.ciphed_file}: ошибка при записи ")
 
-    def read_ciphed_text(self)->None:
+    def read_ciphed_text(self) -> None:
         """Считываем зашифрованный текст из файла
 
         Returns:
@@ -127,12 +130,12 @@ class Assymetric:
         try:
             with open(self.ciphed_file, 'rb') as file:
                 c_text = file.read()
-            logging.info(f"Файл {self.ciphed_file} прочитан")    
+            logging.info(f"Файл {self.ciphed_file} прочитан")
             return c_text
         except:
             logging.error(f"Файл {self.ciphed_file} : ошибка при открытии")
 
-    def encrypt(self)->None:
+    def encrypt(self) -> None:
         """Шифруем текст"""
         data = str()
         with open(self.decrypted_file, 'rb') as file:

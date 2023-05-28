@@ -2,14 +2,11 @@ import argparse
 import json
 import logging
 import os
-
-from keys_generator import keys_generator
-from encryption import encrypt
-from decryption import decrypt
+from mods import keys_generator, encrypt, decrypt
 logging.basicConfig(level=logging.INFO)
 
 
-def check_size(size:int):
+def check_size(size: int):
     """Проверка размера ключа
 
     Args:
@@ -38,8 +35,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
     mode = (args.generation, args.encryption, args.decryption)
     SETTINGS = os.path.join(args.config_file)
-    SETTINGS = os.path.join("setting.json")
-    settings = str()
     try:
         with open(SETTINGS) as json_file:
             settings = json.load(json_file)

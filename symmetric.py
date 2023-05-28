@@ -6,9 +6,12 @@ from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.backends import default_backend
 
 logging.basicConfig(level=logging.INFO)
+
+
 class Symmetric:
     """Класс генерирует симметричные ключи шифрования использую алогритм Camellia"""
-    def __init__(self, size: int, sym_key_file: str, encrypt_file: str = None, decrypt_file: str = None)->None:
+
+    def __init__(self, size: int, sym_key_file: str, encrypt_file: str = None, decrypt_file: str = None) -> None:
         """Функция инициализации"""
         self.size = size
         self.sym_key_file = sym_key_file
@@ -29,7 +32,7 @@ class Symmetric:
         padded_text = padder.update(text)+padder.finalize()
         return padded_text
 
-    def de_padd(self, plaintext:str)->bytes:
+    def de_padd(self, plaintext: str) -> bytes:
         """Делает текст нормальным после функции _padd
 
         Args:
@@ -41,7 +44,7 @@ class Symmetric:
         else:
             return ord(last_byte)
 
-    def decrypt(self)->str:
+    def decrypt(self) -> str:
         """Расшифровывает текст
 
         Returns:
@@ -95,7 +98,7 @@ class Symmetric:
         except:
             logging.error(f"Файл {self.encrypt_file}: ошибка при записи ")
 
-    def encrytp(self)->None:
+    def encrytp(self) -> None:
         """Шифрует заданные данные и записывает их в зашифрованный файл
         """
         try:
@@ -103,7 +106,7 @@ class Symmetric:
                 data = file.read()
         except:
             logging.error(f"Файл {self.decrypt_file} не прочитан")
-            
+
         iv = os.urandom(16)
 
         key = self.open_symkey()
@@ -116,7 +119,6 @@ class Symmetric:
         c_text = iv + encryptor.update(data) + encryptor.finalize()
 
         self.write_encrytext(c_text)
-
 
     def open_symkey(self):
         try:
