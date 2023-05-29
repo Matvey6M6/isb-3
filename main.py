@@ -39,7 +39,7 @@ if __name__ == "__main__":
         with open(SETTINGS) as json_file:
             settings = json.load(json_file)
     except:
-        logging.error(f"Не найден json файл")
+        logging.error(f"Не найден json файл {SETTINGS}")
         exit()
     size = int(settings["size"])
     size, flag = check_size(size)
@@ -54,12 +54,12 @@ if __name__ == "__main__":
                 settings['private_key'], settings['public_key'], settings['symmetric_key'], settings['symmetric_key_decrypted'], size)
             logging.info('Ключи успешно сгенерированны')
         except:
-            logging("НЕ получилось сгенерировать ключи ")
+            logging("Не получилось сгенерировать ключи ")
     elif (mode == (False, True, False)):
         try:
             encrypt(settings['src_text_file'], settings['private_key'],
                     settings['symmetric_key'], settings['encrypted_file'], settings["symmetric_key_decrypted"], size)
-            logging.info('Данные зашифрованный')
+            logging.info('Данные зашифрованны')
         except:
             logging.error("Отмена шифрования данных")
     elif (mode == (False, False, True)):
@@ -70,4 +70,4 @@ if __name__ == "__main__":
         except:
             logging.error("Ошибка при дешифрации")
     else:
-        logging.error("Режим прогроммы не выбран")
+        logging.error("Режим программы не выбран")
